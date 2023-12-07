@@ -7,7 +7,7 @@ const users: User[] = [
     { id: 2, email: "user@simpletask", passwordHash: '', firstName: "Jan", lastName: "Kowalski", role: "Regular"},
 ];
 
-export const verify = (email: string, password: string): User|null => {
+export const verifyUser = (email: string, password: string): User|null => {
     const user = users.find(u => u.email === email);
     if (user && user.passwordHash === createHash(password)){
         return user;
@@ -15,7 +15,7 @@ export const verify = (email: string, password: string): User|null => {
     return null;
 };
 
-export const hasPermission = (userId: number, role: UserRole): boolean => {
+export const checkUserPermission = (userId: number, role: UserRole): boolean => {
     const user = users.find(u => u.id === userId);
     return user?.role === role;
 }
