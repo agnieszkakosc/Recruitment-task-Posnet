@@ -8,7 +8,7 @@ const tasks: Task[] = [
     { id: 5, name: "Task 2", description: "Task for admin", done: false, ownerId: 2}
 ];
 
-export const add = async (task: Task): Promise<Task> => {
+export const add = (task: Task): Task => {
     const newTask = {
         ...task,
         id: tasks.length + 1
@@ -17,10 +17,10 @@ export const add = async (task: Task): Promise<Task> => {
     return newTask;
 };
 
-export const get = async (id: number): Promise<Task|null> => {
+export const get = (id: number): Task|null => {
     return tasks.find(task => task.id === id) ?? null;
 };
 
-export const getAll = async (): Promise<Task[]> => {
+export const getAll = (): Task[] => {
     return [...tasks];
 };

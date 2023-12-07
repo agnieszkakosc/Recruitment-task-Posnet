@@ -1,23 +1,25 @@
 import express, { Request, Response } from "express";
-import * as TaskService from "./task.service";
+import * as taskService from "./task.service";
 import { Task } from "./task.model";
+import { verifyPermission } from "../auth/auth.service";
 
 export const taskRouter = express.Router();
 
-taskRouter.get("/", async (_: Request, response: Response) => {
+taskRouter.get("/", verifyPermission("Admin"), (_: Request, response: Response) => { 
     try {
-        const tasks = await TaskService.getAll();
+        const tasks = taskService.getAll();
         response.status(200).json(tasks);
     } catch (e) {
         response.status(500).send();
     }
 });
 
-taskRouter.get("/:id", async (request: Request, response: Response) => {
+taskRouter.get("/:id", (request: Request, response: Response) => {
     const id: number = parseInt(request.params.id);
+    const { userId } = request.body.token;
     try {
-      const task = await TaskService.get(id);
-      if (task) {
+      const task = taskService.get(id);
+      if (task && task.ownerId === userId) {
         response.status(200).json(task);
         return;
       }
@@ -27,10 +29,10 @@ taskRouter.get("/:id", async (request: Request, response: Response) => {
     }
 });
 
-taskRouter.post("/", async (request: Request, response: Response) => {
+taskRouter.post("/", (request: Request, response: Response) => {
     try {
         const task: Task = request.body;  
-        const newTask = await TaskService.add(task);
+        const newTask = taskService.add(task);
         response.status(201).json(newTask);
     } catch (e) {
         response.status(500).send();

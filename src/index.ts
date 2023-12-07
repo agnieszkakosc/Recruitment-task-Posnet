@@ -8,7 +8,7 @@ const PORT = 8765;
 
 app.use(express.json());
 app.use("/api/login", authRouter);
-app.use("/api/tasks", [verifyAuthorization, taskRouter]);
+app.use("/api/tasks/", [verifyAuthorization, taskRouter]);
 
 app.listen(PORT, ():void => {
     console.log(`Server listening at port ${PORT}`);

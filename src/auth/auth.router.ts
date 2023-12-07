@@ -5,7 +5,8 @@ import { createToken } from "./auth.service";
 export const authRouter = express.Router();
 authRouter.post("/", (request: Request, response: Response) => {
     try {
-        const { email, password } = request.body;
+        const userObj = request.body;
+        const { email, password } = userObj;
         if (!email || !password){
             response.status(400).send();
             return;
@@ -20,6 +21,7 @@ authRouter.post("/", (request: Request, response: Response) => {
         response.status(200).json({accessToken: token});
         
     } catch (e) {
+        console.log(e);
         response.status(500).send();
     }
 });
