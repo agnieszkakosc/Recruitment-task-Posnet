@@ -21,7 +21,8 @@ export const verifyAuthorization = (request: Request, response: Response, next: 
 
 export const verifyPermission = (userRole: UserRole) => {
     return (request: Request, response: Response, next: NextFunction) => {
-        const { userId } = request.body.token;
+        const token = (request as CustomRequest).token;
+        const { userId } = token as JwtPayload;
         if (checkUserPermission(userId, userRole)) {
             return next();
         } else {
@@ -41,7 +42,7 @@ const getAuthorizationToken = (request: Request): string | undefined => {
         if (authHeaderParts[0] !== 'Bearer'){
             return undefined;
         }
-        return authHeader[1];
+        return authHeaderParts[1];
     }
     return authHeader;
 };
